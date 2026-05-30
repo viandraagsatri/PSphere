@@ -1,0 +1,352 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-card {
+    background-color: #1e3a8a;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    color: #ffffff;
+}
+
+.login-card h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.subtitle {
+    text-align: center;
+    color: #cbd5e1;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.alert-error {
+    background-color: #fee2e2;
+    border: 1px solid #fca5a5;
+    color: #ef4444;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #0f172a;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+input::placeholder {
+    color: #94a3b8;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background-color: #3b82f6;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+}
+
+.dashboard-body {
+    background-color: #f8fafc; /* Latar abu-abu sangat terang */
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar {
+    width: 260px;
+    background-color: #0f172a; /* Biru Navy Tua */
+    color: white;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar-brand {
+    padding: 25px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #1e293b;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 20px 0;
+    flex-grow: 1;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 25px;
+    color: #cbd5e1;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.sidebar-menu li a:hover, .sidebar-menu li a.active {
+    background-color: #1e293b;
+    color: #ffffff;
+    border-left: 4px solid #3b82f6;
+}
+
+.sidebar-bottom {
+    padding: 20px;
+    border-top: 1px solid #1e293b;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #f87171;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.logout-btn:hover {
+    color: #ef4444;
+}
+
+.main-content {
+    margin-left: 260px;
+    flex-grow: 1;
+    width: calc(100% - 260px);
+}
+
+.topbar {
+    background-color: #ffffff;
+    height: 70px;
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.search-bar input {
+    width: 300px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background-color: #f1f5f9;
+    margin: 0;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info {
+    text-align: right;
+}
+
+.user-name {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.content-area {
+    padding: 30px;
+}
+
+.page-title {
+    font-size: 22px;
+    color: #0f172a;
+    margin-bottom: 25px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+.icon-blue { background-color: #eff6ff; color: #3b82f6; }
+.icon-purple { background-color: #faf5ff; color: #a855f7; }
+.icon-green { background-color: #f0fdf4; color: #22c55e; }
+
+.stat-details p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.stat-details h3 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 24px;
+}
+
+.recent-activity {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
+}
+
+.recent-activity h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #1e293b;
+}
+
+.recent-activity p {
+    color: #64748b;
+}
+
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar i {
+    position: absolute;
+    left: 12px;
+    color: #94a3b8;
+}
+
+.search-bar input {
+    width: 300px;
+    padding: 10px 15px 10px 35px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background-color: #f1f5f9;
+    margin: 0;
+    transition: 0.3s;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
