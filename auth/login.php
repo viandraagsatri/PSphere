@@ -3,10 +3,6 @@ session_start();
 include '../config/koneksi.php';
 
 if (isset($_POST['login'])) {
-<<<<<<< HEAD
-=======
-
->>>>>>> f0bb6dac4ab075996aaf026dc2c3138db342e9cf
     $username = $_POST['username'];
     $password = $_POST['password'];
 

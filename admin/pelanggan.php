@@ -10,7 +10,6 @@ include '../config/koneksi.php';
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 if (isset($_POST['simpan'])) {
-
     $nama_pelanggan = $_POST['nama_pelanggan'];
     $no_hp          = $_POST['no_hp'];
     $alamat         = $_POST['alamat'];
@@ -25,11 +24,10 @@ if (isset($_POST['simpan'])) {
 }
 
 if (isset($_POST['update'])) {
-
-    $id              = $_POST['id'];
-    $nama_pelanggan  = $_POST['nama_pelanggan'];
-    $no_hp           = $_POST['no_hp'];
-    $alamat          = $_POST['alamat'];
+    $id             = $_POST['id'];
+    $nama_pelanggan = $_POST['nama_pelanggan'];
+    $no_hp          = $_POST['no_hp'];
+    $alamat         = $_POST['alamat'];
 
     mysqli_query($conn, "
         UPDATE pelanggan
@@ -45,7 +43,6 @@ if (isset($_POST['update'])) {
 }
 
 if ($action == 'hapus') {
-
     $id = $_GET['id'];
 
     mysqli_query($conn, "
@@ -59,164 +56,152 @@ if ($action == 'hapus') {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Data Pelanggan</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Pelanggan - Rental PS</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <h1>Data Pelanggan</h1>
+<body class="dashboard-body">
 
-    <p>
-        Selamat datang,
-        <?= $_SESSION['nama']; ?>
-    </p>
-
-    <a href="dashboard.php">Kembali Dashboard</a>
-    |
-    <a href="../auth/logout.php">Logout</a>
-    <hr>
-
-    <?php
-    if ($action == 'tambah') {
-    ?>
-    <div class="card">
-        <h2>Tambah Pelanggan</h2>
-        <form method="POST">
-            <label>Nama Pelanggan</label><br>
-            <input type="text"
-                name="nama_pelanggan"
-                required>
-
-            <br><br>
-
-            <label>No HP</label><br>
-            <input type="text"
-                name="no_hp"
-                required>
-
-            <br><br>
-
-            <label>Alamat</label><br>
-            <textarea name="alamat"></textarea>
-
-            <br><br>
-
-            <button class="btn-danger" type="submit" name="simpan">
-                Simpan
-            </button>
-
-            <a href="pelanggan.php">
-                <button class="btn-danger" type="button">
-                    Batal
-                </button>
-            </a>
-        </form>
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-gamepad"></i> RENTAL PS
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="dashboard.php"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="pelanggan.php" class="active"><i class="fa-solid fa-users"></i> Data Pelanggan</a></li>
+            <li><a href="ps_unit.php"><i class="fa-solid fa-tv"></i> Kelola Mesin PS</a></li>
+            <li><a href="transaksi.php"><i class="fa-solid fa-file-invoice-dollar"></i> Laporan Transaksi</a></li>
+            <li><a href="pengguna.php"><i class="fa-solid fa-user-shield"></i> Data Pengguna</a></li>
+        </ul>
+        <div class="sidebar-bottom">
+            <a href="../auth/logout.php" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
     </div>
-    <?php
 
-    } elseif ($action == 'edit') {
+    <div class="main-content">
+        <div class="topbar">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Pencarian cepat...">
+            </div>
+            <div class="user-profile">
+                <div class="user-info">
+                    <span class="user-name"><?= $_SESSION['nama']; ?></span>
+                    <span class="user-role">Administrator</span>
+                </div>
+                <div class="user-avatar">
+                    <?= substr($_SESSION['nama'], 0, 1); ?>
+                </div>
+            </div>
+        </div>
 
-        $id = $_GET['id'];
+        <div class="content-area">
+            
+            <?php if ($action == 'tambah') { ?>
+            <div class="recent-activity">
+                <h2 class="page-title">Tambah Pelanggan</h2>
+                <form method="POST" class="form-container">
+                    <div class="input-group">
+                        <label>Nama Pelanggan</label>
+                        <input type="text" name="nama_pelanggan" required>
+                    </div>
 
-        $query = mysqli_query($conn, "
-            SELECT * FROM pelanggan
-            WHERE id_pelanggan='$id'
-        ");
+                    <div class="input-group">
+                        <label>No HP</label>
+                        <input type="text" name="no_hp" required>
+                    </div>
 
-        $data = mysqli_fetch_assoc($query);
-    ?>
+                    <div class="input-group">
+                        <label>Alamat</label>
+                        <textarea name="alamat" rows="4"></textarea>
+                    </div>
 
-    <div class="card">
-        <h2>Edit Pelanggan</h2>
-        <form method="POST">
-            <input type="hidden"
-                name="id"
-                value="<?= $data['id_pelanggan']; ?>">
-            <label>Nama Pelanggan</label><br>
-            <input type="text"
-                name="nama_pelanggan"
-                value="<?= $data['nama_pelanggan']; ?>"
-                required>
+                    <div class="form-actions">
+                        <button class="btn-primary" type="submit" name="simpan"><i class="fa-solid fa-save"></i> Simpan</button>
+                        <a href="pelanggan.php" class="btn-secondary"><i class="fa-solid fa-xmark"></i> Batal</a>
+                    </div>
+                </form>
+            </div>
 
-            <br><br>
+            <?php } elseif ($action == 'edit') { 
+                $id = $_GET['id'];
+                $query = mysqli_query($conn, "SELECT * FROM pelanggan WHERE id_pelanggan='$id'");
+                $data = mysqli_fetch_assoc($query);
+            ?>
+            <div class="recent-activity">
+                <h2 class="page-title">Edit Pelanggan</h2>
+                <form method="POST" class="form-container">
+                    <input type="hidden" name="id" value="<?= $data['id_pelanggan']; ?>">
+                    
+                    <div class="input-group">
+                        <label>Nama Pelanggan</label>
+                        <input type="text" name="nama_pelanggan" value="<?= $data['nama_pelanggan']; ?>" required>
+                    </div>
 
-            <label>No HP</label><br>
-            <input type="text"
-                name="no_hp"
-                value="<?= $data['no_hp']; ?>"
-                required>
-            <br><br>
+                    <div class="input-group">
+                        <label>No HP</label>
+                        <input type="text" name="no_hp" value="<?= $data['no_hp']; ?>" required>
+                    </div>
 
-            <label>Alamat</label><br>
-            <textarea name="alamat"><?= $data['alamat']; ?></textarea>
+                    <div class="input-group">
+                        <label>Alamat</label>
+                        <textarea name="alamat" rows="4"><?= $data['alamat']; ?></textarea>
+                    </div>
 
-            <br><br>
+                    <div class="form-actions">
+                        <button class="btn-primary" type="submit" name="update"><i class="fa-solid fa-save"></i> Update</button>
+                        <a href="pelanggan.php" class="btn-secondary"><i class="fa-solid fa-xmark"></i> Batal</a>
+                    </div>
+                </form>
+            </div>
 
-            <button class="btn-danger" type="submit" name="update">
-                Update
-            </button>
+            <?php } else { 
+                $query = mysqli_query($conn, "SELECT * FROM pelanggan");
+            ?>
+            <div class="header-action" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 class="page-title" style="margin: 0;">Data Pelanggan</h2>
+                <a href="pelanggan.php?action=tambah" class="btn-primary" style="width: auto;"><i class="fa-solid fa-plus"></i> Tambah Pelanggan</a>
+            </div>
 
-            <a href="pelanggan.php">
-                <button class="btn-danger" type="button">
-                    Batal
-                </button>
-            </a>
-        </form>
+            <div class="table-container">
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th width="5%">No</th>
+                            <th>Nama Pelanggan</th>
+                            <th>No HP</th>
+                            <th>Alamat</th>
+                            <th width="12%" style="text-align: center;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    $no = 1;
+                    while ($data = mysqli_fetch_assoc($query)) {
+                    ?>
+                        <tr>
+                            <td><?= $no++; ?></td>
+                            <td style="font-weight: bold; color: #1e293b;"><?= $data['nama_pelanggan']; ?></td>
+                            <td><?= $data['no_hp']; ?></td>
+                            <td><?= $data['alamat']; ?></td>
+                            <td>
+                                <div class="action-group">
+                                    <a href="pelanggan.php?action=edit&id=<?= $data['id_pelanggan']; ?>" class="action-btn edit-btn" title="Edit Data"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a href="pelanggan.php?action=hapus&id=<?= $data['id_pelanggan']; ?>" class="action-btn delete-btn" onclick="return confirm('Yakin ingin menghapus data pelanggan ini?')" title="Hapus Data"><i class="fa-solid fa-trash"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php } ?>
+
+        </div>
     </div>
-    <?php
-
-    } else {
-
-        $query = mysqli_query($conn, "
-            SELECT * FROM pelanggan
-        ");
-    ?>
-
-    <a href="pelanggan.php?action=tambah">
-        Tambah Pelanggan
-    </a>
-
-    <br><br>
-
-    <table border="1" cellpadding="10">
-        <tr>
-            <th>No</th>
-            <th>Nama Pelanggan</th>
-            <th>No HP</th>
-            <th>Alamat</th>
-            <th>Aksi</th>
-        </tr>
-    <?php
-
-    $no = 1;
-    while ($data = mysqli_fetch_assoc($query)) {
-    ?>
-
-    <tr>
-        <td><?= $no++; ?></td>
-        <td><?= $data['nama_pelanggan']; ?></td>
-        <td><?= $data['no_hp']; ?></td>
-        <td><?= $data['alamat']; ?></td>
-        <td>
-
-            <a href="pelanggan.php?action=edit&id=<?= $data['id_pelanggan']; ?>">
-                Edit
-            </a>
-
-            |
-
-            <a href="pelanggan.php?action=hapus&id=<?= $data['id_pelanggan']; ?>"
-            onclick="return confirm('Yakin hapus data?')">
-
-                Hapus
-
-            </a>
-        </td>
-    </tr>
-
-    <?php } ?>
-    </table>
-    <?php } ?>
 </body>
 </html>
