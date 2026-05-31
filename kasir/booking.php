@@ -87,7 +87,7 @@ if ($action == 'hapus') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Booking - Rental PS</title>
+    <title>Data Booking - PSphere</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -95,7 +95,7 @@ if ($action == 'hapus') {
 
     <div class="sidebar">
         <div class="sidebar-brand">
-            <i class="fa-solid fa-gamepad"></i> RENTAL PS
+            <i class="fa-solid fa-gamepad"></i> RENTAL PSphere
         </div>
         <ul class="sidebar-menu">
             <li><a href="dashboard.php"><i class="fa-solid fa-house"></i> Dashboard</a></li>

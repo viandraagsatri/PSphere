@@ -16,6 +16,7 @@ if (isset($_POST['login'])) {
 
     if ($data) {
         $_SESSION['login'] = true;
+        $_SESSION['id_user'] = $data['id_user'];
         $_SESSION['nama']  = $data['nama_user'];
         $_SESSION['role']  = $data['role'];
 
@@ -35,7 +36,7 @@ if (isset($_POST['login'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Rental PS</title>
+    <title>Login - PSphere</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
@@ -51,7 +52,7 @@ if (isset($_POST['login'])) {
                 </svg>
             </div>
             
-            <h1>Selamat Datang</h1>
+            <h1>Selamat Datang di PSphere</h1>
             <p class="subtitle">Silakan login untuk melanjutkan</p>
 
             <?php if (isset($error)): ?>
