@@ -109,10 +109,14 @@ if ($action == 'hapus') {
 
     <div class="main-content">
         <div class="topbar">
-            <div class="search-bar">
+            <form action="" method="GET" class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Cari booking...">
-            </div>
+                <input type="text" name="search" placeholder="Cari pelanggan atau PS..." value="<?= isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+                <?php if(isset($_GET['action'])) { ?>
+                    <input type="hidden" name="action" value="<?= $_GET['action']; ?>">
+                <?php } ?>
+            </form>
+
             <div class="user-profile">
                 <div class="user-info">
                     <span class="user-name"><?= $_SESSION['nama']; ?></span>
@@ -225,13 +229,27 @@ if ($action == 'hapus') {
             </div>
 
             <?php } else { 
-                $query = mysqli_query($conn, "
-                    SELECT booking.*, pelanggan.nama_pelanggan, ps_unit.nama_ps, ps_unit.tipe 
-                    FROM booking 
-                    JOIN pelanggan ON booking.id_pelanggan = pelanggan.id_pelanggan 
-                    JOIN ps_unit ON booking.id_ps = ps_unit.id_ps 
-                    ORDER BY booking.id_booking DESC
-                ");
+                $search = isset($_GET['search']) ? $_GET['search'] : '';
+                if ($search != '') {
+                    $query = mysqli_query($conn, "
+                        SELECT booking.*, pelanggan.nama_pelanggan, ps_unit.nama_ps, ps_unit.tipe 
+                        FROM booking 
+                        JOIN pelanggan ON booking.id_pelanggan = pelanggan.id_pelanggan 
+                        JOIN ps_unit ON booking.id_ps = ps_unit.id_ps 
+                        WHERE pelanggan.nama_pelanggan LIKE '%$search%' 
+                           OR ps_unit.nama_ps LIKE '%$search%' 
+                           OR booking.status_booking LIKE '%$search%'
+                        ORDER BY booking.id_booking DESC
+                    ");
+                } else {
+                    $query = mysqli_query($conn, "
+                        SELECT booking.*, pelanggan.nama_pelanggan, ps_unit.nama_ps, ps_unit.tipe 
+                        FROM booking 
+                        JOIN pelanggan ON booking.id_pelanggan = pelanggan.id_pelanggan 
+                        JOIN ps_unit ON booking.id_ps = ps_unit.id_ps 
+                        ORDER BY booking.id_booking DESC
+                    ");
+                }
             ?>
             <div class="header-action" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 class="page-title" style="margin: 0;">Kelola Booking</h2>
@@ -283,6 +301,7 @@ if ($action == 'hapus') {
                             </td>
                         </tr>
                     <?php } ?>
+                    <?php if(mysqli_num_rows($query) == 0) { echo "<tr><td colspan='8' style='text-align:center;'>Data booking tidak ditemukan</td></tr>"; } ?>
                     </tbody>
                 </table>
             </div>

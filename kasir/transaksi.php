@@ -78,10 +78,14 @@ if (isset($_POST['simpan'])) {
 
     <div class="main-content">
         <div class="topbar">
-            <div class="search-bar">
+            <form action="" method="GET" class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Cari transaksi...">
-            </div>
+                <input type="text" name="search" placeholder="Cari nama atau metode..." value="<?= isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+                <?php if(isset($_GET['action'])) { ?>
+                    <input type="hidden" name="action" value="<?= $_GET['action']; ?>">
+                <?php } ?>
+            </form>
+
             <div class="user-profile">
                 <div class="user-info">
                     <span class="user-name"><?= $_SESSION['nama']; ?></span>
@@ -137,14 +141,29 @@ if (isset($_POST['simpan'])) {
             </div>
 
             <?php } else { 
-                $query = mysqli_query($conn, "
-                    SELECT transaksi.*, pelanggan.nama_pelanggan, ps_unit.nama_ps, ps_unit.tipe
-                    FROM transaksi
-                    JOIN booking ON transaksi.id_booking = booking.id_booking
-                    JOIN pelanggan ON booking.id_pelanggan = pelanggan.id_pelanggan
-                    JOIN ps_unit ON booking.id_ps = ps_unit.id_ps
-                    ORDER BY transaksi.id_transaksi DESC
-                ");
+                $search = isset($_GET['search']) ? $_GET['search'] : '';
+                if ($search != '') {
+                    $query = mysqli_query($conn, "
+                        SELECT transaksi.*, pelanggan.nama_pelanggan, ps_unit.nama_ps, ps_unit.tipe
+                        FROM transaksi
+                        JOIN booking ON transaksi.id_booking = booking.id_booking
+                        JOIN pelanggan ON booking.id_pelanggan = pelanggan.id_pelanggan
+                        JOIN ps_unit ON booking.id_ps = ps_unit.id_ps
+                        WHERE pelanggan.nama_pelanggan LIKE '%$search%'
+                           OR ps_unit.nama_ps LIKE '%$search%'
+                           OR transaksi.metode_bayar LIKE '%$search%'
+                        ORDER BY transaksi.id_transaksi DESC
+                    ");
+                } else {
+                    $query = mysqli_query($conn, "
+                        SELECT transaksi.*, pelanggan.nama_pelanggan, ps_unit.nama_ps, ps_unit.tipe
+                        FROM transaksi
+                        JOIN booking ON transaksi.id_booking = booking.id_booking
+                        JOIN pelanggan ON booking.id_pelanggan = pelanggan.id_pelanggan
+                        JOIN ps_unit ON booking.id_ps = ps_unit.id_ps
+                        ORDER BY transaksi.id_transaksi DESC
+                    ");
+                }
             ?>
             <div class="header-action" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 class="page-title" style="margin: 0;">Riwayat Transaksi</h2>
@@ -189,6 +208,7 @@ if (isset($_POST['simpan'])) {
                             </td>
                         </tr>
                     <?php } ?>
+                    <?php if(mysqli_num_rows($query) == 0) { echo "<tr><td colspan='6' style='text-align:center;'>Data transaksi tidak ditemukan</td></tr>"; } ?>
                     </tbody>
                 </table>
             </div>

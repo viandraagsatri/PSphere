@@ -49,10 +49,8 @@ $d_transaksi = mysqli_fetch_assoc($q_transaksi);
 
     <div class="main-content">
         <div class="topbar">
-            <div class="search-bar">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Pencarian cepat...">
-            </div>
+            <div></div>
+            
             <div class="user-profile">
                 <div class="user-info">
                     <span class="user-name"><?= $_SESSION['nama']; ?></span>

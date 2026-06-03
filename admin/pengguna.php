@@ -54,7 +54,7 @@ if ($action == 'hapus') {
     $id = $_GET['id'];
 
     if ($id == $_SESSION['id_user']) {
-        echo "Tidak bisa menghapus akun yang sedang login!";
+        echo "<script>alert('Tidak bisa menghapus akun yang sedang login!'); window.location='pengguna.php';</script>";
         exit;
     }
 
@@ -81,7 +81,7 @@ if ($action == 'hapus') {
 
     <div class="sidebar">
         <div class="sidebar-brand">
-            <i class="fa-solid fa-gamepad"></i> RENTAL PSphere
+            <i class="fa-solid fa-gamepad"></i> RENTAL PS
         </div>
         <ul class="sidebar-menu">
             <li><a href="dashboard.php"><i class="fa-solid fa-house"></i> Dashboard</a></li>
@@ -97,10 +97,14 @@ if ($action == 'hapus') {
 
     <div class="main-content">
         <div class="topbar">
-            <div class="search-bar">
+            <form action="" method="GET" class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Pencarian cepat...">
-            </div>
+                <input type="text" name="search" placeholder="Cari nama, username, atau role..." value="<?= isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+                <?php if(isset($_GET['action'])) { ?>
+                    <input type="hidden" name="action" value="<?= $_GET['action']; ?>">
+                <?php } ?>
+            </form>
+
             <div class="user-profile">
                 <div class="user-info">
                     <span class="user-name"><?= $_SESSION['nama']; ?></span>
@@ -120,34 +124,24 @@ if ($action == 'hapus') {
                 <form method="POST" class="form-container">
                     <div class="input-group">
                         <label>Nama User</label>
-                        <input type="text" name="nama_user"
-                        value="<?= isset($data) ? $data['nama_user'] : ''; ?>" required>
+                        <input type="text" name="nama_user" required>
                     </div>
 
                     <div class="input-group">
                         <label>Username</label>
-                        <input type="text" name="username"
-                        value="<?= isset($data) ? $data['username'] : ''; ?>" required>
+                        <input type="text" name="username" required>
                     </div>
 
                     <div class="input-group">
                         <label>Password</label>
-                        <input type="text" name="password"
-                        value="<?= isset($data) ? $data['password'] : ''; ?>" required>
+                        <input type="text" name="password" required>
                     </div>
 
                     <div class="input-group">
                         <label>Role</label>
                         <select name="role" required>
-                            <option value="admin"
-                            <?= isset($data) && $data['role']=='admin' ? 'selected' : ''; ?>>
-                                Admin
-                            </option>
-
-                            <option value="kasir"
-                            <?= isset($data) && $data['role']=='kasir' ? 'selected' : ''; ?>>
-                                Kasir
-                            </option>
+                            <option value="admin">Admin</option>
+                            <option value="kasir">Kasir</option>
                         </select>
                     </div>
 
@@ -155,7 +149,6 @@ if ($action == 'hapus') {
                         <button class="btn-primary" type="submit" name="simpan">
                             <i class="fa-solid fa-save"></i> Simpan
                         </button>
-
                         <a href="pengguna.php" class="btn-secondary">
                             <i class="fa-solid fa-xmark"></i> Batal
                         </a>
@@ -175,34 +168,24 @@ if ($action == 'hapus') {
                     
                     <div class="input-group">
                         <label>Nama User</label>
-                        <input type="text" name="nama_user"
-                        value="<?= isset($data) ? $data['nama_user'] : ''; ?>" required>
+                        <input type="text" name="nama_user" value="<?= isset($data) ? $data['nama_user'] : ''; ?>" required>
                     </div>
 
                     <div class="input-group">
                         <label>Username</label>
-                        <input type="text" name="username"
-                        value="<?= isset($data) ? $data['username'] : ''; ?>" required>
+                        <input type="text" name="username" value="<?= isset($data) ? $data['username'] : ''; ?>" required>
                     </div>
 
                     <div class="input-group">
                         <label>Password</label>
-                        <input type="text" name="password"
-                        value="<?= isset($data) ? $data['password'] : ''; ?>" required>
+                        <input type="text" name="password" value="<?= isset($data) ? $data['password'] : ''; ?>" required>
                     </div>
 
                     <div class="input-group">
                         <label>Role</label>
                         <select name="role" required>
-                            <option value="admin"
-                            <?= isset($data) && $data['role']=='admin' ? 'selected' : ''; ?>>
-                                Admin
-                            </option>
-
-                            <option value="kasir"
-                            <?= isset($data) && $data['role']=='kasir' ? 'selected' : ''; ?>>
-                                Kasir
-                            </option>
+                            <option value="admin" <?= isset($data) && $data['role']=='admin' ? 'selected' : ''; ?>>Admin</option>
+                            <option value="kasir" <?= isset($data) && $data['role']=='kasir' ? 'selected' : ''; ?>>Kasir</option>
                         </select>
                     </div>
 
@@ -210,7 +193,6 @@ if ($action == 'hapus') {
                         <button class="btn-primary" type="submit" name="update">
                             <i class="fa-solid fa-save"></i> Update
                         </button>
-
                         <a href="pengguna.php" class="btn-secondary">
                             <i class="fa-solid fa-xmark"></i> Batal
                         </a>
@@ -219,7 +201,13 @@ if ($action == 'hapus') {
             </div>
 
             <?php } else { 
-                $query = mysqli_query($conn, "SELECT * FROM users");
+                // Logika Filter Pencarian
+                $search = isset($_GET['search']) ? $_GET['search'] : '';
+                if ($search != '') {
+                    $query = mysqli_query($conn, "SELECT * FROM users WHERE nama_user LIKE '%$search%' OR username LIKE '%$search%' OR role LIKE '%$search%'");
+                } else {
+                    $query = mysqli_query($conn, "SELECT * FROM users");
+                }
             ?>
             <div class="header-action" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 class="page-title" style="margin: 0;">Data Pengguna</h2>
@@ -244,25 +232,29 @@ if ($action == 'hapus') {
                     ?>
                         <tr>
                             <td><?= $no++; ?></td>
-                            <td><?= $data['nama_user']; ?></td>
+                            <td style="font-weight: bold; color: #1e293b;"><?= $data['nama_user']; ?></td>
                             <td><?= $data['username']; ?></td>
-                            <td><?= strtoupper($data['role']); ?></td>
+                            <td>
+                                <?php if ($data['role'] == 'admin') { ?>
+                                    <span style="background-color: #fef08a; color: #854d0e; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; text-transform: uppercase;">ADMIN</span>
+                                <?php } else { ?>
+                                    <span style="background-color: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; text-transform: uppercase;">KASIR</span>
+                                <?php } ?>
+                            </td>
                             <td>
                                 <div class="action-group">
-                                    <a href="pengguna.php?action=edit&id=<?= $data['id_user']; ?>"
-                                    class="action-btn edit-btn">
+                                    <a href="pengguna.php?action=edit&id=<?= $data['id_user']; ?>" class="action-btn edit-btn" title="Edit Data">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
 
-                                    <a href="pengguna.php?action=hapus&id=<?= $data['id_user']; ?>"
-                                    class="action-btn delete-btn"
-                                    onclick="return confirm('Yakin ingin menghapus pengguna ini?')">
+                                    <a href="pengguna.php?action=hapus&id=<?= $data['id_user']; ?>" class="action-btn delete-btn" onclick="return confirm('Yakin ingin menghapus pengguna ini?')" title="Hapus Data">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
                     <?php } ?>
+                    <?php if(mysqli_num_rows($query) == 0) { echo "<tr><td colspan='5' style='text-align:center;'>Data pengguna tidak ditemukan</td></tr>"; } ?>
                     </tbody>
                 </table>
             </div>

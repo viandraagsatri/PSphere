@@ -15,11 +15,7 @@ if (isset($_POST['simpan'])) {
     $harga_per_jam = $_POST['harga_per_jam'];
     $status_ps     = $_POST['status_ps'];
 
-    mysqli_query($conn, "
-        INSERT INTO ps_unit(nama_ps, tipe, harga_per_jam, status_ps)
-        VALUES('$nama_ps', '$tipe', '$harga_per_jam', '$status_ps')
-    ");
-
+    mysqli_query($conn, "INSERT INTO ps_unit(nama_ps, tipe, harga_per_jam, status_ps) VALUES('$nama_ps', '$tipe', '$harga_per_jam', '$status_ps')");
     header("Location: ps_unit.php");
     exit;
 }
@@ -31,28 +27,14 @@ if (isset($_POST['update'])) {
     $harga_per_jam = $_POST['harga_per_jam'];
     $status_ps     = $_POST['status_ps'];
 
-    mysqli_query($conn, "
-        UPDATE ps_unit
-        SET
-            nama_ps='$nama_ps',
-            tipe='$tipe',
-            harga_per_jam='$harga_per_jam',
-            status_ps='$status_ps'
-        WHERE id_ps='$id'
-    ");
-
+    mysqli_query($conn, "UPDATE ps_unit SET nama_ps='$nama_ps', tipe='$tipe', harga_per_jam='$harga_per_jam', status_ps='$status_ps' WHERE id_ps='$id'");
     header("Location: ps_unit.php");
     exit;
 }
 
 if ($action == 'hapus') {
     $id = $_GET['id'];
-
-    mysqli_query($conn, "
-        DELETE FROM ps_unit
-        WHERE id_ps='$id'
-    ");
-
+    mysqli_query($conn, "DELETE FROM ps_unit WHERE id_ps='$id'");
     header("Location: ps_unit.php");
     exit;
 }
@@ -70,9 +52,7 @@ if ($action == 'hapus') {
 <body class="dashboard-body">
 
     <div class="sidebar">
-        <div class="sidebar-brand">
-            <i class="fa-solid fa-gamepad"></i> RENTAL PS
-        </div>
+        <div class="sidebar-brand"><i class="fa-solid fa-gamepad"></i> RENTAL PS</div>
         <ul class="sidebar-menu">
             <li><a href="dashboard.php"><i class="fa-solid fa-house"></i> Dashboard</a></li>
             <li><a href="pelanggan.php"><i class="fa-solid fa-users"></i> Data Pelanggan</a></li>
@@ -87,23 +67,24 @@ if ($action == 'hapus') {
 
     <div class="main-content">
         <div class="topbar">
-            <div class="search-bar">
+            <form action="" method="GET" class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Pencarian cepat...">
-            </div>
+                <input type="text" name="search" placeholder="Cari mesin PS..." value="<?= isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+                <?php if(isset($_GET['action'])) { ?>
+                    <input type="hidden" name="action" value="<?= $_GET['action']; ?>">
+                <?php } ?>
+            </form>
+
             <div class="user-profile">
                 <div class="user-info">
                     <span class="user-name"><?= $_SESSION['nama']; ?></span>
                     <span class="user-role">Administrator</span>
                 </div>
-                <div class="user-avatar">
-                    <?= substr($_SESSION['nama'], 0, 1); ?>
-                </div>
+                <div class="user-avatar"><?= substr($_SESSION['nama'], 0, 1); ?></div>
             </div>
         </div>
 
         <div class="content-area">
-            
             <?php if ($action == 'tambah') { ?>
             <div class="recent-activity">
                 <h2 class="page-title">Tambah Mesin PS</h2>
@@ -112,7 +93,6 @@ if ($action == 'hapus') {
                         <label>Nama / Nomor PS</label>
                         <input type="text" name="nama_ps" placeholder="Contoh: PS A" required>
                     </div>
-
                     <div class="input-group">
                         <label>Tipe Konsol</label>
                         <select name="tipe" required>
@@ -121,12 +101,10 @@ if ($action == 'hapus') {
                             <option value="PS5">PlayStation 5</option>
                         </select>
                     </div>
-
                     <div class="input-group">
                         <label>Harga Per Jam (Rp)</label>
                         <input type="number" name="harga_per_jam" placeholder="Contoh: 10000" required>
                     </div>
-
                     <div class="input-group">
                         <label>Status</label>
                         <select name="status_ps" required>
@@ -135,7 +113,6 @@ if ($action == 'hapus') {
                             <option value="pemeliharaan">Pemeliharaan (Rusak/Maintenance)</option>
                         </select>
                     </div>
-
                     <div class="form-actions">
                         <button class="btn-primary" type="submit" name="simpan"><i class="fa-solid fa-save"></i> Simpan</button>
                         <a href="ps_unit.php" class="btn-secondary"><i class="fa-solid fa-xmark"></i> Batal</a>
@@ -152,12 +129,10 @@ if ($action == 'hapus') {
                 <h2 class="page-title">Edit Mesin PS</h2>
                 <form method="POST" class="form-container">
                     <input type="hidden" name="id" value="<?= $data['id_ps']; ?>">
-                    
                     <div class="input-group">
                         <label>Nama / Nomor PS</label>
                         <input type="text" name="nama_ps" value="<?= $data['nama_ps']; ?>" required>
                     </div>
-
                     <div class="input-group">
                         <label>Tipe Konsol</label>
                         <select name="tipe" required>
@@ -166,12 +141,10 @@ if ($action == 'hapus') {
                             <option value="PS5" <?= ($data['tipe'] == 'PS5') ? 'selected' : ''; ?>>PlayStation 5</option>
                         </select>
                     </div>
-
                     <div class="input-group">
                         <label>Harga Per Jam (Rp)</label>
                         <input type="number" name="harga_per_jam" value="<?= $data['harga_per_jam']; ?>" required>
                     </div>
-
                     <div class="input-group">
                         <label>Status</label>
                         <select name="status_ps" required>
@@ -180,7 +153,6 @@ if ($action == 'hapus') {
                             <option value="pemeliharaan" <?= ($data['status_ps'] == 'pemeliharaan') ? 'selected' : ''; ?>>Pemeliharaan (Rusak/Maintenance)</option>
                         </select>
                     </div>
-
                     <div class="form-actions">
                         <button class="btn-primary" type="submit" name="update"><i class="fa-solid fa-save"></i> Update</button>
                         <a href="ps_unit.php" class="btn-secondary"><i class="fa-solid fa-xmark"></i> Batal</a>
@@ -189,7 +161,13 @@ if ($action == 'hapus') {
             </div>
 
             <?php } else { 
-                $query = mysqli_query($conn, "SELECT * FROM ps_unit");
+                // Logika Filter Pencarian
+                $search = isset($_GET['search']) ? $_GET['search'] : '';
+                if ($search != '') {
+                    $query = mysqli_query($conn, "SELECT * FROM ps_unit WHERE nama_ps LIKE '%$search%' OR tipe LIKE '%$search%' OR status_ps LIKE '%$search%'");
+                } else {
+                    $query = mysqli_query($conn, "SELECT * FROM ps_unit");
+                }
             ?>
             <div class="header-action" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 class="page-title" style="margin: 0;">Kelola Mesin PS</h2>
@@ -236,16 +214,16 @@ if ($action == 'hapus') {
                             <td>
                                 <div class="action-group">
                                     <a href="ps_unit.php?action=edit&id=<?= $data['id_ps']; ?>" class="action-btn edit-btn" title="Edit Data"><i class="fa-solid fa-pen-to-square"></i></a>
-                                    <a href="ps_unit.php?action=hapus&id=<?= $data['id_ps']; ?>" class="action-btn delete-btn" onclick="return confirm('Yakin ingin menghapus data PS ini?')" title="Hapus Data"><i class="fa-solid fa-trash"></i></a>
+                                    <a href="ps_unit.php?action=hapus&id=<?= $data['id_ps']; ?>" class="action-btn delete-btn" onclick="return confirm('Yakin hapus data PS ini?')" title="Hapus Data"><i class="fa-solid fa-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
                     <?php } ?>
+                    <?php if(mysqli_num_rows($query) == 0) { echo "<tr><td colspan='6' style='text-align:center;'>Data tidak ditemukan</td></tr>"; } ?>
                     </tbody>
                 </table>
             </div>
             <?php } ?>
-
         </div>
     </div>
 </body>
