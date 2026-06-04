@@ -239,7 +239,7 @@ if ($action == 'hapus') {
                         WHERE pelanggan.nama_pelanggan LIKE '%$search%' 
                            OR ps_unit.nama_ps LIKE '%$search%' 
                            OR booking.status_booking LIKE '%$search%'
-                        ORDER BY booking.id_booking DESC
+                        ORDER BY booking.id_booking ASC
                     ");
                 } else {
                     $query = mysqli_query($conn, "
@@ -247,7 +247,7 @@ if ($action == 'hapus') {
                         FROM booking 
                         JOIN pelanggan ON booking.id_pelanggan = pelanggan.id_pelanggan 
                         JOIN ps_unit ON booking.id_ps = ps_unit.id_ps 
-                        ORDER BY booking.id_booking DESC
+                        ORDER BY booking.id_booking ASC
                     ");
                 }
             ?>

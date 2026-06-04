@@ -13,7 +13,6 @@ if ($_SESSION['role'] != 'admin') {
 
 include '../config/koneksi.php';
 
-// Logika Filter Pencarian untuk Laporan Transaksi
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 if ($search != '') {
@@ -26,7 +25,7 @@ if ($search != '') {
         WHERE pelanggan.nama_pelanggan LIKE '%$search%' 
            OR ps_unit.nama_ps LIKE '%$search%' 
            OR transaksi.metode_bayar LIKE '%$search%'
-        ORDER BY transaksi.id_transaksi DESC
+        ORDER BY transaksi.tanggal_transaksi ASC
     ");
 } else {
     $query = mysqli_query($conn, "
@@ -35,7 +34,7 @@ if ($search != '') {
         JOIN booking ON transaksi.id_booking = booking.id_booking
         JOIN pelanggan ON booking.id_pelanggan = pelanggan.id_pelanggan
         JOIN ps_unit ON booking.id_ps = ps_unit.id_ps
-        ORDER BY transaksi.id_transaksi DESC
+        ORDER BY transaksi.tanggal_transaksi ASC
     ");
 }
 ?>

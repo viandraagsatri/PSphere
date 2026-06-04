@@ -33,18 +33,38 @@ if (isset($_POST['simpan'])) {
     
     $total_bayar = $harga_per_jam * $total_jam;
 
-    mysqli_query($conn, "
-        INSERT INTO transaksi(id_booking, tanggal_transaksi, total_bayar, metode_bayar)
-        VALUES('$id_booking', NOW(), '$total_bayar', '$metode_bayar')
-    ");
+    $id_user = $_SESSION['id_user'];
+    mysqli_begin_transaction($conn);
+    try {
+        mysqli_query($conn, "
+            INSERT INTO transaksi(id_booking, id_user, tanggal_transaksi, total_bayar, metode_bayar, status_pembayaran)
+            VALUES('$id_booking', '$id_user', NOW(), '$total_bayar', '$metode_bayar', 'lunas')
+        ");
 
-    mysqli_query($conn, "
-        UPDATE booking SET status_booking='selesai' WHERE id_booking='$id_booking'
-    ");
+        mysqli_query($conn, "
+            UPDATE booking SET status_booking='selesai' WHERE id_booking='$id_booking'
+        ");
 
-    mysqli_query($conn, "
-        UPDATE ps_unit SET status_ps='tersedia' WHERE id_ps='$id_ps'
-    ");
+        mysqli_query($conn, "
+            UPDATE ps_unit SET status_ps='tersedia' WHERE id_ps='$id_ps'
+        ");
+
+        mysqli_commit($conn);
+
+        echo "<script>
+            alert('Transaksi berhasil');
+            window.location='transaksi.php';
+        </script>";
+
+    } catch (Exception $e) {
+
+        mysqli_rollback($conn);
+
+        echo "<script>
+            alert('Transaksi gagal');
+            window.location='transaksi.php?action=tambah';
+        </script>";
+    }
 
     header("Location: transaksi.php");
     exit;
@@ -152,7 +172,7 @@ if (isset($_POST['simpan'])) {
                         WHERE pelanggan.nama_pelanggan LIKE '%$search%'
                            OR ps_unit.nama_ps LIKE '%$search%'
                            OR transaksi.metode_bayar LIKE '%$search%'
-                        ORDER BY transaksi.id_transaksi DESC
+                        ORDER BY transaksi.id_transaksi ASC
                     ");
                 } else {
                     $query = mysqli_query($conn, "
@@ -161,7 +181,7 @@ if (isset($_POST['simpan'])) {
                         JOIN booking ON transaksi.id_booking = booking.id_booking
                         JOIN pelanggan ON booking.id_pelanggan = pelanggan.id_pelanggan
                         JOIN ps_unit ON booking.id_ps = ps_unit.id_ps
-                        ORDER BY transaksi.id_transaksi DESC
+                        ORDER BY transaksi.id_transaksi ASC
                     ");
                 }
             ?>
