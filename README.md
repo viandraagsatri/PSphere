@@ -3,8 +3,10 @@ PSphere merupakan sistem manajemen rental PlayStation yang dibangun menggunakan 
 
 
 # 📌 Detail Konsep
-- View, SQL Join, Union All
+**View, SQL Join, Union All**
+
 Pada proyek PSphere, SQL JOIN digunakan untuk menggabungkan data pelanggan, booking, transaksi, dan mesin PS. Hasilnya kemudian disatukan menggunakan UNION ALL untuk menampilkan aktivitas booking dan transaksi dalam satu laporan, lalu disimpan dalam VIEW v_laporan_aktivitas agar pembuatan laporan menjadi lebih mudah dan efisien.
+```sql
 CREATE VIEW v_laporan_aktivitas AS
 
 SELECT
@@ -31,30 +33,36 @@ FROM transaksi t
 JOIN booking b ON t.id_booking = b.id_booking
 JOIN pelanggan p ON b.id_pelanggan = p.id_pelanggan
 JOIN ps_unit ps ON b.id_ps = ps.id_ps;
-
--Stored Procedure
-
-
--Function
+```
+**Stored Procedure**
 
 
--Trigger
-trg_update_status_ps
-Trigger digunakan untuk menjaga konsistensi status mesin PS.
+**Function**
+
+
+**Trigger**
+
+`trg_update_status_ps`: Trigger digunakan untuk menjaga konsistensi status mesin PS.
 
 Ketika booking selesai dan pembayaran lunas:
+```sql
 UPDATE ps_unit
 SET status_ps = 'tersedia'
+```
 
 Ketika booking aktif:
+```sql
 UPDATE ps_unit
 SET status_ps = 'dipakai'
+```
 Dengan demikian status mesin akan berubah otomatis sesuai kondisi transaksi.
 
--Fragmentasi
+**Fragmentasi**
+
 Pada proyek PSphere, fragmentasi horizontal diterapkan pada tabel transaksi berdasarkan metode pembayaran. Tujuannya adalah memisahkan data transaksi ke dalam kelompok yang lebih spesifik sehingga memudahkan proses pencarian, pelaporan, dan analisis data.
 
 Implementasi fragmentasi dilakukan menggunakan View sebagai berikut:
+```sql
 CREATE VIEW transaksi_cash AS
 SELECT *
 FROM transaksi
@@ -69,8 +77,9 @@ CREATE VIEW transaksi_qris AS
 SELECT *
 FROM transaksi
 WHERE metode_bayar = 'qris';
+```
 
--Backup Database
+**Backup Database**
 
 
--Task Scheduler
+**Task Scheduler**
