@@ -161,6 +161,9 @@ WHERE metode_bayar = 'qris';
 ```
 
 **Backup Database**
+<img width="782" height="127" alt="image" src="https://github.com/user-attachments/assets/bcab242f-008d-47e7-ad88-07a855c2a953" />
 
 
 **Task Scheduler**
+<img width="1907" height="1198" alt="image" src="https://github.com/user-attachments/assets/e5248afa-f8bb-438c-bd36-62ff3798f645" />
+
