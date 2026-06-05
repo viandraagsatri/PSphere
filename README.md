@@ -135,20 +135,34 @@ SET status_ps = 'dipakai'
 ```
 Dengan demikian status mesin akan berubah otomatis sesuai kondisi transaksi.
 
-`kurangi_stok_produk` 
+`kurangi_stok_produk`: Trigger digunakan untuk mengelola inventaris produk (makanan, minuman, atau camilan) secara otomatis.
+
+Ketika pesanan produk baru ditambahkan ke dalam detail transaksi pelanggan:
 ```sql
-CREATE TRIGGER kurangi_stok_produk 
-AFTER INSERT ON transaksi_produk 
-FOR EACH ROW 
-BEGIN
-    UPDATE produk 
-    SET stok = stok - NEW.qty 
-    WHERE id_produk = NEW.id_produk;
-END;
+UPDATE produk 
+SET stok = stok - NEW.qty 
+WHERE id_produk = NEW.id_produk;
 ```
 <img width="532" height="198" alt="image" src="https://github.com/user-attachments/assets/4c11aacd-6bed-4a16-899f-f2d391ee54ef" />
 
+**Transaction**
 
+Transaction digunakan pada proyek PSphere untuk menjamin sifat ACID (Atomicity, Consistency, Isolation, Durability). Fitur ini memastikan bahwa serangkaian query yang saling berhubungan dieksekusi sebagai satu kesatuan unit kerja, sehingga jika salah satu query gagal, seluruh rangkaian operasi akan dibatalkan (`ROLLBACK`) demi menjaga konsistensi data.
+
+Implementasi ini diterapkan pada proses **Pencatatan Transaksi Pembayaran beserta Pembelian Produk Kantin**, di mana sistem harus memasukkan data nota ke tabel `transaksi` sekaligus mencatat item pesanan di tabel `transaksi_produk` secara bersamaan:
+
+```sql
+START TRANSACTION;
+
+INSERT INTO transaksi (id_booking, id_user, total_bayar, biaya_tambahan, diskon, metode_bayar, tanggal_transaksi, status_pembayaran, jumlah_dibayar)
+VALUES (1, 2, 50000.00, 0.00, 0.00, 'cash', NOW(), 'lunas', 50000.00);
+
+INSERT INTO transaksi_produk (id_booking, id_produk, qty, subtotal, status_pesanan)
+VALUES (1, 1, 2, 24000.00, 'selesai');
+
+COMMIT;
+```
+Dengan menggunakan mekanisme Transaction, jika proses penambahan produk ke tabel `transaksi_produk` mengalami kegagalan (misalnya karena stok habis), maka pencatatan nota di tabel transaksi akan otomatis dibatalkan, sehingga tidak akan terjadi anomali atau ketidaksesuaian data keuangan pada sistem rental.
 
 **Fragmentasi**
 
