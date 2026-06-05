@@ -119,30 +119,41 @@ END;
 
 
 **#Trigger**
+Trigger digunakan untuk menjaga konsistensi data secara otomatis berdasarkan aktivitas penyewaan pelanggan dan transaksi produk tanpa perlu dimanipulasi manual dari sisi aplikasi PHP.
 
-`trg_update_status_ps`: Trigger digunakan untuk menjaga konsistensi status mesin PS.
-
-Ketika booking selesai dan pembayaran lunas:
-```sql
-UPDATE ps_unit
-SET status_ps = 'tersedia'
+`trg_booking_ps_dipakai`: Ditujukan untuk mengubah status mesin PS menjadi 'dipakai' secara otomatis ketika ada pelanggan yang melakukan pemesanan unit PS baru (AFTER INSERT).
 ```
-
-Ketika booking aktif:
-```sql
-UPDATE ps_unit
-SET status_ps = 'dipakai'
+SQL
+CREATE TRIGGER `trg_booking_ps_dipakai` AFTER INSERT ON `booking` FOR EACH ROW 
+BEGIN
+    UPDATE ps_unit
+    SET status_ps = 'dipakai'
+    WHERE id_ps = NEW.id_ps;
+END;
 ```
-Dengan demikian status mesin akan berubah otomatis sesuai kondisi transaksi.
-
-`kurangi_stok_produk`: Trigger digunakan untuk mengelola inventaris produk (makanan, minuman, atau camilan) secara otomatis.
-
-Ketika pesanan produk baru ditambahkan ke dalam detail transaksi pelanggan:
-```sql
-UPDATE produk 
-SET stok = stok - NEW.qty 
-WHERE id_produk = NEW.id_produk;
+`trg_booking_selesai`: Ditujukan untuk mengembalikan status mesin PS menjadi 'tersedia' setelah kasir memperbarui status penyewaan pelanggan menjadi 'selesai' (AFTER UPDATE).
 ```
+SQL
+CREATE TRIGGER `trg_booking_selesai` AFTER UPDATE ON `booking` FOR EACH ROW 
+BEGIN
+    IF NEW.status_booking = 'selesai' THEN
+        UPDATE ps_unit
+        SET status_ps = 'tersedia'
+        WHERE id_ps = NEW.id_ps;
+    END IF;
+END;
+```
+`kurangi_stok_produk`: Ditujukan untuk mengelola inventaris produk makanan, minuman, atau camilan di kantin rental secara otomatis ketika detail transaksi item baru ditambahkan oleh kasir (AFTER INSERT).
+```
+SQL
+CREATE TRIGGER `kurangi_stok_produk` AFTER INSERT ON `transaksi_produk` FOR EACH ROW 
+BEGIN
+    UPDATE produk 
+    SET stok = stok - NEW.qty 
+    WHERE id_produk = NEW.id_produk;
+END;
+```
+Dengan adanya ketiga trigger ini, siklus ketersediaan mesin PS dan jumlah stok barang di kantin akan bergerak otomatis secara real-time mengikuti kondisi transaksi di lapangan.
 <img width="532" height="198" alt="image" src="https://github.com/user-attachments/assets/4c11aacd-6bed-4a16-899f-f2d391ee54ef" />
 
 **#Transaction**
