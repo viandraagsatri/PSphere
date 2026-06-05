@@ -88,6 +88,7 @@ END;
 ```
 
 4. `sp_delete_pelanggan`: Menghapus data pelanggan tertentu berdasarkan ID.
+<img width="1533" height="666" alt="image" src="https://github.com/user-attachments/assets/7f00f768-f505-42aa-8cd5-dd1b3d4bc35f" />
 
 ```sql
 CREATE PROCEDURE sp_delete_pelanggan (IN p_id INT)   
