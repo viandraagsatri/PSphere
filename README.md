@@ -134,6 +134,18 @@ UPDATE ps_unit
 SET status_ps = 'dipakai'
 ```
 Dengan demikian status mesin akan berubah otomatis sesuai kondisi transaksi.
+
+`kurangi_stok_produk` 
+```sql
+CREATE TRIGGER kurangi_stok_produk 
+AFTER INSERT ON transaksi_produk 
+FOR EACH ROW 
+BEGIN
+    UPDATE produk 
+    SET stok = stok - NEW.qty 
+    WHERE id_produk = NEW.id_produk;
+END;
+```
 <img width="532" height="198" alt="image" src="https://github.com/user-attachments/assets/4c11aacd-6bed-4a16-899f-f2d391ee54ef" />
 
 
@@ -168,7 +180,6 @@ Secara bersamaan, event ini merapikan data dengan mengubah status_booking yang m
 CREATE EVENT reset_status_ps 
 ON SCHEDULE EVERY 1 DAY 
 DO BEGIN
-    -- Mengubah status PS menjadi tersedia hanya jika jam_selesai-nya sudah lewat
     UPDATE ps_unit 
     SET status_ps = 'tersedia'
     WHERE id_ps IN (
@@ -176,7 +187,6 @@ DO BEGIN
         WHERE jam_selesai <= NOW() AND status_booking = 'aktif'
     );
     
-    -- Sekaligus update status booking yang kelupaan di-close oleh kasir
     UPDATE booking 
     SET status_booking = 'selesai'
     WHERE jam_selesai <= NOW() AND status_booking = 'aktif';
