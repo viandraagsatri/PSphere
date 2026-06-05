@@ -36,7 +36,7 @@ JOIN pelanggan p ON b.id_pelanggan = p.id_pelanggan
 JOIN ps_unit ps ON b.id_ps = ps.id_ps;
 ```
 
-**Stored Procedure**
+**#Stored Procedure**
 
 Stored Procedure digunakan untuk membungkus operasi CRUD (Create, Read, Update, Delete) pada tabel pelanggan agar eksekusi query menjadi lebih cepat, aman, dan modular.
 
@@ -99,7 +99,7 @@ END;
 
 ```
 
-**Function**
+**#Function**
 
 `fn_total_bayar`: Ditujukan untuk menghitung total biaya sewa secara dinamis berdasarkan tarif harga per jam dari unit PS yang dipilih dan durasi (total jam) penyewaan.
 
@@ -118,7 +118,7 @@ END;
 
 
 
-**Trigger**
+**#Trigger**
 
 `trg_update_status_ps`: Trigger digunakan untuk menjaga konsistensi status mesin PS.
 
@@ -145,7 +145,7 @@ WHERE id_produk = NEW.id_produk;
 ```
 <img width="532" height="198" alt="image" src="https://github.com/user-attachments/assets/4c11aacd-6bed-4a16-899f-f2d391ee54ef" />
 
-**Transaction**
+**#Transaction**
 
 Transaction digunakan pada proyek PSphere untuk menjamin sifat ACID (Atomicity, Consistency, Isolation, Durability). Fitur ini memastikan bahwa serangkaian query yang saling berhubungan dieksekusi sebagai satu kesatuan unit kerja, sehingga jika salah satu query gagal, seluruh rangkaian operasi akan dibatalkan (`ROLLBACK`) demi menjaga konsistensi data.
 
@@ -164,7 +164,7 @@ COMMIT;
 ```
 Dengan menggunakan mekanisme Transaction, jika proses penambahan produk ke tabel `transaksi_produk` mengalami kegagalan (misalnya karena stok habis), maka pencatatan nota di tabel transaksi akan otomatis dibatalkan, sehingga tidak akan terjadi anomali atau ketidaksesuaian data keuangan pada sistem rental.
 
-**Fragmentasi**
+**#Fragmentasi**
 
 Pada proyek PSphere, fragmentasi horizontal diterapkan pada tabel transaksi berdasarkan metode pembayaran. Tujuannya adalah memisahkan data transaksi ke dalam kelompok yang lebih spesifik sehingga memudahkan proses pencarian, pelaporan, dan analisis data.
 
@@ -185,7 +185,7 @@ SELECT *
 FROM transaksi
 WHERE metode_bayar = 'qris';
 ```
-**Event Scheduled**
+**#Event Scheduled**
 Selain Task Scheduler dari OS Windows, database ini secara mandiri juga menggunakan fitur Event Scheduler dari MySQL untuk mengeksekusi tugas otomatis di level server database.
 Terdapat event bernama reset_status_ps yang dijadwalkan berjalan setiap satu hari sekali secara otomatis.
 Event ini berfungsi untuk melakukan auto-checkout, yakni mengubah status_ps menjadi 'tersedia' pada tabel ps_unit jika waktu penyewaan (jam_selesai) sudah terlewati.
@@ -208,14 +208,14 @@ END;
 ```
 <img width="693" height="230" alt="image" src="https://github.com/user-attachments/assets/74d1293b-c729-46d5-bf46-6a75fd443ff4" />
 
-**Backup Database**
+**#Backup Database**
 
 Pada proyek PSphere, diterapkan fitur backup database untuk menjaga keamanan dan ketersediaan data rental PS. Backup manual dilakukan menggunakan perintah mysqldump sesuai modul praktikum, sehingga admin dapat membuat salinan database secara langsung dan menyimpannya sebagai file cadangan. Backup ini berfungsi sebagai langkah antisipasi apabila terjadi kehilangan data, kerusakan sistem, atau kesalahan saat pengelolaan database.
 
 <img width="782" height="127" alt="image" src="https://github.com/user-attachments/assets/bcab242f-008d-47e7-ad88-07a855c2a953" />
 
 
-**Task Scheduler**
+**#Task Scheduler**
 
 Selain backup manual, PSphere juga menerapkan backup otomatis menggunakan Windows Task Scheduler. Task Scheduler dikonfigurasi untuk menjalankan script backup pada waktu yang telah ditentukan sehingga proses pencadangan database dapat berlangsung secara berkala tanpa campur tangan pengguna. Dengan mekanisme ini, data tetap terlindungi dan selalu tersedia cadangannya apabila diperlukan proses pemulihan (restore).
 
