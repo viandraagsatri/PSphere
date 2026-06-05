@@ -1,5 +1,6 @@
 # 🎮 PSphere
 PSphere merupakan sistem manajemen rental PlayStation yang dibangun menggunakan PHP dan MySQL. Sistem ini digunakan untuk mengelola data pelanggan, mesin PS, booking, transaksi, serta laporan aktivitas rental. Proyek ini menerapkan berbagai materi basis data seperti View, SQL Join, Stored Procedure, Function, Transaction, Union All, Trigger, Fragmentasi serta Backup Database dan Task Scheduler.
+<img width="1901" height="1090" alt="image" src="https://github.com/user-attachments/assets/463f60a1-f523-44ec-94cf-41919566135f" />
 
 
 # 📌 Detail Konsep
@@ -40,6 +41,7 @@ JOIN ps_unit ps ON b.id_ps = ps.id_ps;
 Stored Procedure digunakan untuk membungkus operasi CRUD (Create, Read, Update, Delete) pada tabel pelanggan agar eksekusi query menjadi lebih cepat, aman, dan modular.
 
 1. `sp_insert_pelanggan`: Menambahkan data pelanggan baru beserta nomor HP dan alamat.
+<img width="1900" height="711" alt="image" src="https://github.com/user-attachments/assets/c65a889f-bed1-410b-a85a-7c28c8377587" />
 
 ```sql
 CREATE PROCEDURE sp_insert_pelanggan (
@@ -55,6 +57,7 @@ END;
 ```
 
 2. `sp_select_pelanggan`: Menampilkan seluruh data pelanggan yang terdaftar.
+<img width="1861" height="682" alt="image" src="https://github.com/user-attachments/assets/04d692d1-b213-4eab-b449-60d79bd3ff38" />
 
 ```sql
 CREATE PROCEDURE sp_select_pelanggan ()   
@@ -65,6 +68,7 @@ END;
 ```
 
 3. `sp_update_pelanggan`: Memperbarui informasi nama, nomor HP, dan alamat pelanggan berdasarkan ID.
+<img width="1512" height="553" alt="image" src="https://github.com/user-attachments/assets/e349c5ce-4649-49a7-b430-9d5b845f6763" />
 
 ```sql
 CREATE PROCEDURE sp_update_pelanggan (
