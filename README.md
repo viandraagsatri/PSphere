@@ -161,9 +161,15 @@ WHERE metode_bayar = 'qris';
 ```
 
 **Backup Database**
+
+Pada proyek PSphere, diterapkan fitur backup database untuk menjaga keamanan dan ketersediaan data rental PS. Backup manual dilakukan menggunakan perintah mysqldump sesuai modul praktikum, sehingga admin dapat membuat salinan database secara langsung dan menyimpannya sebagai file cadangan. Backup ini berfungsi sebagai langkah antisipasi apabila terjadi kehilangan data, kerusakan sistem, atau kesalahan saat pengelolaan database.
+
 <img width="782" height="127" alt="image" src="https://github.com/user-attachments/assets/bcab242f-008d-47e7-ad88-07a855c2a953" />
 
 
 **Task Scheduler**
+
+Selain backup manual, PSphere juga menerapkan backup otomatis menggunakan Windows Task Scheduler. Task Scheduler dikonfigurasi untuk menjalankan script backup pada waktu yang telah ditentukan sehingga proses pencadangan database dapat berlangsung secara berkala tanpa campur tangan pengguna. Dengan mekanisme ini, data tetap terlindungi dan selalu tersedia cadangannya apabila diperlukan proses pemulihan (restore).
+
 <img width="1907" height="1198" alt="image" src="https://github.com/user-attachments/assets/e5248afa-f8bb-438c-bd36-62ff3798f645" />
 
