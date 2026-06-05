@@ -34,11 +34,81 @@ JOIN booking b ON t.id_booking = b.id_booking
 JOIN pelanggan p ON b.id_pelanggan = p.id_pelanggan
 JOIN ps_unit ps ON b.id_ps = ps.id_ps;
 ```
+
 **Stored Procedure**
 
+Stored Procedure digunakan untuk membungkus operasi CRUD (Create, Read, Update, Delete) pada tabel pelanggan agar eksekusi query menjadi lebih cepat, aman, dan modular.
+
+1. `sp_insert_pelanggan`: Menambahkan data pelanggan baru beserta nomor HP dan alamat.
+
+```sql
+CREATE PROCEDURE sp_insert_pelanggan (
+    IN p_nama VARCHAR(100), 
+    IN p_nohp VARCHAR(20),
+    IN p_alamat TEXT
+)   
+BEGIN
+    INSERT INTO pelanggan(nama_pelanggan, no_hp, alamat)
+    VALUES(p_nama, p_nohp, p_alamat);
+END;
+
+```
+
+2. `sp_select_pelanggan`: Menampilkan seluruh data pelanggan yang terdaftar.
+
+```sql
+CREATE PROCEDURE sp_select_pelanggan ()   
+BEGIN
+    SELECT * FROM pelanggan;
+END;
+
+```
+
+3. `sp_update_pelanggan`: Memperbarui informasi nama, nomor HP, dan alamat pelanggan berdasarkan ID.
+
+```sql
+CREATE PROCEDURE sp_update_pelanggan (
+    IN p_id INT, 
+    IN p_nama VARCHAR(100), 
+    IN p_nohp VARCHAR(20),
+    IN p_alamat TEXT
+)   
+BEGIN
+    UPDATE pelanggan
+    SET nama_pelanggan = p_nama,
+        no_hp = p_nohp,
+        alamat = p_alamat
+    WHERE id_pelanggan = p_id;
+END;
+
+```
+
+4. `sp_delete_pelanggan`: Menghapus data pelanggan tertentu berdasarkan ID.
+
+```sql
+CREATE PROCEDURE sp_delete_pelanggan (IN p_id INT)   
+BEGIN
+    DELETE FROM pelanggan
+    WHERE id_pelanggan = p_id;
+END;
+
+```
 
 **Function**
 
+`fn_total_bayar`: Ditujukan untuk menghitung total biaya sewa secara dinamis berdasarkan tarif harga per jam dari unit PS yang dipilih dan durasi (total jam) penyewaan.
+
+```sql
+CREATE FUNCTION fn_total_bayar (
+    p_harga DECIMAL(10,2), 
+    p_jam INT
+) RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    RETURN p_harga * p_jam;
+END;
+
+```
 
 **Trigger**
 
