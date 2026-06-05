@@ -114,6 +114,9 @@ BEGIN
 END;
 
 ```
+<img width="463" height="310" alt="image" src="https://github.com/user-attachments/assets/11ddd5ea-50ea-4192-a8df-029e2f2392f3" />
+
+
 
 **Trigger**
 
@@ -131,6 +134,9 @@ UPDATE ps_unit
 SET status_ps = 'dipakai'
 ```
 Dengan demikian status mesin akan berubah otomatis sesuai kondisi transaksi.
+<img width="532" height="198" alt="image" src="https://github.com/user-attachments/assets/4c11aacd-6bed-4a16-899f-f2d391ee54ef" />
+
+
 
 **Fragmentasi**
 
