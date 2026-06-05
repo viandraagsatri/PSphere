@@ -159,6 +159,30 @@ SELECT *
 FROM transaksi
 WHERE metode_bayar = 'qris';
 ```
+**Event Scheduled**
+Selain Task Scheduler dari OS Windows, database ini secara mandiri juga menggunakan fitur Event Scheduler dari MySQL untuk mengeksekusi tugas otomatis di level server database.
+Terdapat event bernama reset_status_ps yang dijadwalkan berjalan setiap satu hari sekali secara otomatis.
+Event ini berfungsi untuk melakukan auto-checkout, yakni mengubah status_ps menjadi 'tersedia' pada tabel ps_unit jika waktu penyewaan (jam_selesai) sudah terlewati.
+Secara bersamaan, event ini merapikan data dengan mengubah status_booking yang masih 'aktif' menjadi 'selesai' jika kasir lupa melakukan penutupan (close) transaksi.
+```sql
+CREATE EVENT reset_status_ps 
+ON SCHEDULE EVERY 1 DAY 
+DO BEGIN
+    -- Mengubah status PS menjadi tersedia hanya jika jam_selesai-nya sudah lewat
+    UPDATE ps_unit 
+    SET status_ps = 'tersedia'
+    WHERE id_ps IN (
+        SELECT id_ps FROM booking 
+        WHERE jam_selesai <= NOW() AND status_booking = 'aktif'
+    );
+    
+    -- Sekaligus update status booking yang kelupaan di-close oleh kasir
+    UPDATE booking 
+    SET status_booking = 'selesai'
+    WHERE jam_selesai <= NOW() AND status_booking = 'aktif';
+END;
+```
+<img width="693" height="230" alt="image" src="https://github.com/user-attachments/assets/74d1293b-c729-46d5-bf46-6a75fd443ff4" />
 
 **Backup Database**
 
